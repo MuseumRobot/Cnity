@@ -20,8 +20,8 @@ public class TcpClientHandler : MonoBehaviour{
     //初始化
     public void InitSocket(){
         //定义服务器的IP和端口，端口与服务器对应
-        //ip = IPAddress.Parse("172.20.45.10");//可以是局域网或互联网ip，此处是本机
-        ip = IPAddress.Parse("192.168.186.131");
+        ip = IPAddress.Parse("172.16.97.131");//可以是局域网或互联网ip，此处是本机
+        //ip = IPAddress.Parse("192.168.186.131");
         ipEnd = new IPEndPoint(ip, 6666); //服务器端口号
 
 

@@ -5,9 +5,8 @@ public class TcpTest : MonoBehaviour{
     public float speed = 3.0f;
     string editString = "hello wolrd"; //编辑框文字
     GameObject cube;
-
-    TcpClientHandler tcpClient;
     RayDemo04 fakeURG;
+    TcpClientHandler tcpClient;
     // Use this for initialization
     void Start(){
         //初始化网络连接
@@ -17,7 +16,6 @@ public class TcpTest : MonoBehaviour{
 
         //找到cube
         cube = GameObject.Find("Cube");
-        fakeURG.feedbackstr = "";
     }
 
     void OnGUI(){
@@ -32,17 +30,27 @@ public class TcpTest : MonoBehaviour{
         if (tcpClient.GetRecvStr() != null){
             switch (tcpClient.GetRecvStr()){
                 case "leftrotate":
-                    cube.transform.Rotate(Vector3.down, speed * Time.deltaTime);
+                    cube.transform.Rotate(0, -100 * speed * Time.deltaTime, 0, Space.Self);
+                    tcpClient.recvStr = "";
                     break;
                 case "rightrotate":
-                    cube.transform.Rotate(Vector3.up, speed * Time.deltaTime);
+                    cube.transform.Rotate(0, 100 * speed * Time.deltaTime, 0, Space.Self);
+                    tcpClient.recvStr = "";
                     break;
                 case "forward":
                     cube.transform.Translate(0, 0,speed*Time.deltaTime);
                     tcpClient.recvStr = "";
                     break;
                 case "backward":
-                    cube.transform.Translate(0, 0, -speed * Time.deltaTime);
+                    //cube.transform.Translate(0, 0, -speed * Time.deltaTime);
+                    fakeURG.DrawFieldOfView();
+                    Debug.Log(fakeURG.feedbackstr);
+                    //tcpClient.recvStr = "";
+                    fakeURG.feedbackstr += string.Format("|{0:G},",(int)(cube.transform.position.x));
+                    fakeURG.feedbackstr += string.Format("{0:G}!",(int)(cube.transform.position.y));
+                    tcpClient.SocketSend(fakeURG.feedbackstr);
+                    Debug.Log(fakeURG.feedbackstr);
+                    fakeURG.feedbackstr = "";
                     break;
             }
         }
