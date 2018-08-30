@@ -10,7 +10,7 @@ public class TcpClientHandler : MonoBehaviour{
     Socket serverSocket; //服务器端socket
     IPAddress ip; //主机ip
     IPEndPoint ipEnd;
-    string recvStr; //接收的字符串
+    public string recvStr; //接收的字符串
     string sendStr; //发送的字符串
     byte[] recvData = new byte[1024]; //接收的数据，必须为字节
     byte[] sendData = new byte[1024]; //发送的数据，必须为字节
@@ -20,8 +20,8 @@ public class TcpClientHandler : MonoBehaviour{
     //初始化
     public void InitSocket(){
         //定义服务器的IP和端口，端口与服务器对应
-        ip = IPAddress.Parse("115.159.59.238");
-        //ip = IPAddress.Parse("192.168.0.106"); //可以是局域网或互联网ip，此处是本机
+        //ip = IPAddress.Parse("172.20.45.10");//可以是局域网或互联网ip，此处是本机
+        ip = IPAddress.Parse("192.168.186.131");
         ipEnd = new IPEndPoint(ip, 6666); //服务器端口号
 
 
@@ -57,12 +57,10 @@ public class TcpClientHandler : MonoBehaviour{
     void SocketReceive(){
         SocketConnet();
         //不断接收服务器发来的数据
-        while (true)
-        {
+        while (true){
             recvData = new byte[1024];
             recvLen = serverSocket.Receive(recvData);
-            if (recvLen == 0)
-            {
+            if (recvLen == 0){
                 SocketConnet();
                 continue;
             }
@@ -75,16 +73,14 @@ public class TcpClientHandler : MonoBehaviour{
     public string GetRecvStr(){
         string returnStr;
         //加锁防止字符串被改
-        lock (this)
-        {
+        lock (this){
             returnStr = recvStr;
         }
         return returnStr;
     }
     public void SocketQuit(){
         //关闭线程
-        if (connectThread != null)
-        {
+        if (connectThread != null){
             connectThread.Interrupt();
             connectThread.Abort();
         }
